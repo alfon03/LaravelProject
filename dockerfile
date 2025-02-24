@@ -1,16 +1,21 @@
 FROM php:8.0-fpm
 
+USER root
+
 RUN apt-get update && apt-get install -y \
+    php-cli \
+    php-mbstring \
+    unzip \
+    curl \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     zip \
     git \
-    curl \
-    libpq-dev \  # Agregar soporte para PostgreSQL
+    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_pgsql \  # Cambiar a pdo_pgsql para PostgreSQL
-    && rm -rf /var/lib/apt/lists/*  
+    && docker-php-ext-install gd pdo pdo_pgsql \
+    && rm -rf /var/lib/apt/lists/*  # Limpiar caché
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
